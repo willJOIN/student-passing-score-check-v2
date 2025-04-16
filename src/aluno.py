@@ -12,22 +12,22 @@ class Aluno:
         pass
 
     @classmethod
-    def set_nota1(cls) -> None:
-        cls.nota1 = 0.0
+    def set_nota1(cls, nota1: float) -> None:
+        cls.nota1 = nota1
 
     @classmethod
-    def set_nota2(cls) -> None:
-        cls.nota2 = 0.0
+    def set_nota2(cls, nota2: float) -> None:
+        cls.nota2 = nota2
 
     @classmethod
     def set_media_notas(cls, nota1: float, nota2: float) -> None:
-        cls.media_notas = 0.0
+        cls.media_notas = (nota1 + nota2) / 2
 
     @classmethod
     def set_conceito(cls, media_notas: float) -> None:
         cls.conceito = cls.__get_conceito(media_notas)
 
-    @classmethod
+    @staticmethod
     def __get_conceito(media_notas: float) -> str:
         match media_notas:
             case m if 9.0 < m < 10.0:
