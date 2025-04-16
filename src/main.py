@@ -19,5 +19,7 @@ def main():
 
     print(obj_aluno.media_notas)
 
+    print(obj_aluno.conceito)
+
 if __name__ == "__main__":
     main()
