@@ -1,12 +1,11 @@
-import re
-
+from conceito_strategy import ConceitoApprovalStrategy # type: ignore
 
 class Aluno:
     nota1: float = 0.0
     nota2: float = 0.0
     media_notas: float = 0.0
     conceito: str = ''
-    status_aprovacao: False
+    status_aprovacao: bool = False
 
     def __init__(self):
         pass
@@ -45,14 +44,5 @@ class Aluno:
 
     @classmethod
     def set_status_aprovacao(cls, conceito: str) -> None:
-        cls.status_aprovacao = cls.__get_status_aprovacao(conceito)
-
-    @classmethod
-    def __get_status_aprovacao(cls, conceito: str) -> bool:
-        patterns_aprovado = [
-            r'a', r'b', r'c'
-        ]
-        
-        for pattern in patterns_aprovado:
-            if re.search(pattern, conceito):
-                return True
+        strategy = ConceitoApprovalStrategy()
+        cls.status_aprovacao = strategy.is_approved(conceito)
