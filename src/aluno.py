@@ -1,5 +1,8 @@
 from conceito_strategy import ConceitoApprovalStrategy # type: ignore
 
+class ErroNotaInvalida(Exception):
+    pass
+
 class Aluno:
     nota1: float = 0.0
     nota2: float = 0.0
@@ -12,10 +15,14 @@ class Aluno:
 
     @classmethod
     def set_nota1(cls, nota1: float) -> None:
+        if nota1 > 10.0 or nota1 < 0.0:
+            raise ErroNotaInvalida("Nota inválida")
         cls.nota1 = nota1
 
     @classmethod
     def set_nota2(cls, nota2: float) -> None:
+        if nota2 > 10.0 or nota2 < 0.0:
+            raise ErroNotaInvalida("Nota inválida")
         cls.nota2 = nota2
 
     @classmethod

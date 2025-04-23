@@ -17,9 +17,9 @@ def main():
 
     obj_aluno.set_status_aprovacao(obj_aluno.conceito)
 
-    print(obj_aluno.media_notas)
+    print("Nota média:", obj_aluno.media_notas)
 
-    print(obj_aluno.conceito)
+    print("Conceito:", obj_aluno.conceito)
 
 if __name__ == "__main__":
     main()
