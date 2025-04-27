@@ -1,55 +1,35 @@
-from conceito_strategy import ConceitoApprovalStrategy # type: ignore
+from validador_notas import ValidadorDeNotas
+from calculadora_de_notas import CalculadoraDeNotas
+from conceito_strategy import ConceitoStrategy
 
 class ErroNotaInvalida(Exception):
     pass
 
 class Aluno:
-    nota1: float = 0.0
-    nota2: float = 0.0
-    media_notas: float = 0.0
-    conceito: str = ''
-    status_aprovacao: bool = False
+    # Atributos de instância, agora cada aluno possui seus próprios dados.
+    def __init__(self, conceito_strategy: ConceitoStrategy) -> None:
+        self.nota1: float = 0.0
+        self.nota2: float = 0.0
+        self.media_notas: float = 0.0
+        self.conceito: str = ''
+        self.status_aprovacao: bool = False
+        self.conceito_strategy = conceito_strategy # Injeção de dependência de uma estratégia de conceito
 
-    def __init__(self):
-        pass
-
-    @classmethod
-    def set_nota1(cls, nota1: float) -> None:
-        if nota1 > 10.0 or nota1 < 0.0:
+    def set_nota1(self, nota1: float) -> None:
+        if not ValidadorDeNotas.valida_nota(nota1):  # Realiza a validação de notas em outra classe.
             raise ErroNotaInvalida("Nota inválida")
-        cls.nota1 = nota1
+        self.nota1 = nota1
 
-    @classmethod
-    def set_nota2(cls, nota2: float) -> None:
-        if nota2 > 10.0 or nota2 < 0.0:
+    def set_nota2(self, nota2: float) -> None:
+        if not ValidadorDeNotas.valida_nota(nota2): # Realiza a validação de notas em outra classe.
             raise ErroNotaInvalida("Nota inválida")
-        cls.nota2 = nota2
+        self.nota2 = nota2
 
-    @classmethod
-    def set_media_notas(cls, nota1: float, nota2: float) -> None:
-        cls.media_notas = (nota1 + nota2) / 2
+    def set_media_notas(self) -> None:
+        self.media_notas = CalculadoraDeNotas.calcula_media(self.nota1, self.nota2) # Realiza o calculo da média em outra classe.
 
-    @classmethod
-    def set_conceito(cls, media_notas: float) -> None:
-        cls.conceito = cls.__get_conceito(media_notas)
+    def set_conceito(self) -> None:
+        self.conceito = self.conceito_strategy.calcula_conceito(self.media_notas)
 
-    @staticmethod
-    def __get_conceito(media_notas: float) -> str:
-        match media_notas:
-            case m if 9.0 <= m <= 10.0:
-                return 'a'
-            case m if 7.5 <= m < 9.0:
-                return 'b'
-            case m if 6.0 <= m < 7.5:
-                return 'c'
-            case m if 4.0 <= m < 6.0:
-                return 'd'
-            case m if 0.0 <= m < 4.0:
-                return 'e'
-            case _:
-                return ''
-
-    @classmethod
-    def set_status_aprovacao(cls, conceito: str) -> None:
-        strategy = ConceitoApprovalStrategy()
-        cls.status_aprovacao = strategy.is_approved(conceito)
+    def set_status_aprovacao(self) -> None:
+        self.status_aprovacao = self.conceito_strategy.is_approved(self.conceito)
